@@ -1,0 +1,1 @@
+alert('Picture question loaded!');
