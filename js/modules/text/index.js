@@ -1,0 +1,1 @@
+alert('Text module loaded!');
