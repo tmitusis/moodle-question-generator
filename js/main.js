@@ -333,12 +333,12 @@ const to_export = (function (){
 
     function generateRandomInteger(from, to) {
         return Math.round(
-            (Math.random() * to) + from
+            (Math.random() * (to - from)) + from
         );
     }
 
     function generateRandomFloat(from, to) {
-        return (Math.random() * to) + from;
+        return (Math.random() * (to - from)) + from;
     }
 
     function getRandomNoun() {
