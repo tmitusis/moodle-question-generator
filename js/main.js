@@ -284,6 +284,7 @@ const to_export = (function (){
     /**
      * Generate a .zip file from the data in the object
      * @param {ZippableData[]} data - the data to zip
+     * @param {Function} cb - callback for when the zipping is completed
      */
     function generateZip(data, cb) {
         const zip = new JSZip();
