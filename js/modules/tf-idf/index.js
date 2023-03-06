@@ -3,7 +3,7 @@ function init(appendToBody) {
     const el_txt = `<form class="offset-4 col-4">
             <div class="row">
                 <label for="category" class="form-label">Категория</label>
-                <input id="category" type="text" placeholder="/примерни/категории/" class="form-control" aria-describedby="category_help">
+                <input id="category" type="text" placeholder="/примерни/категории" class="form-control" aria-describedby="category_help">
                 <div id="category_help" class="form-text">Категория в която да е въпроса.</div>
             </div>
             <div class="row">
@@ -16,7 +16,7 @@ function init(appendToBody) {
                 <input id="number_of_questions" type="number" class="form-control" aria-describedby="number_of_questions_help">
                 <div id="number_of_questions_help" class="form-text">Колко въпроси искате да има</div>
             </div>
-            <button id="generate-tf-idf" type="button" class="btn btn-primary">Генерирай въпроси</button>
+            <button id="generate_questions" type="button" class="btn btn-primary">Генерирай въпроси</button>
         </form>`
     ;
 
@@ -55,7 +55,7 @@ function init(appendToBody) {
 
     function generateGift(word, docs, tf_idf, all_answers, question_number) {
         console.log(`Generating gift number ${question_number}`);
-        const question = `::Q${question_number}::[html]<p>Пресметнете TF-IDF за думата предоставена в примера:</p>\n${_genTable(docs, word)} {`;
+        const question = `::Q${question_number}::[html]<p>Пресметнете TF-IDF за думата предоставена в примера:</p>\\n${_genTable(docs, word)} {`;
         const ret = [];
 
         ret.push(question);
@@ -125,7 +125,7 @@ function init(appendToBody) {
         return generateGift(word, docs, correct_answer, possible_answ, question_number);
     }
 
-    $('#generate-tf-idf').click(function () {
+    $('#generate_questions').click(function () {
         const question_counts = parseInt($('#number_of_questions').val());
         const questions = [];
 
