@@ -30,7 +30,6 @@ function init(appendToBody) {
 
     $('#generate_questions').click(function () {
         var question = $('#question').val();
-        const questions = [];
 
         const int_range = question.match(utils.INT_RANGE_REGEX);
         const float_range = question.match(utils.FLOAT_RANGE_REGEX);
@@ -40,12 +39,16 @@ function init(appendToBody) {
 
         const q_num = parseInt($('#number_of_questions').val());
 
+        const fcont = [utils.parseCategories('#category'), ''];
+
         for (let j = 0; j < q_num; ++j) {
+            let curr_q = question;
+
             // Заменя макрото за конкретни думи, колкото и пъти да го има
             for (let i = 0, max = words.length; i < max; ++i) {
                 const MACRO = words[i];
 
-                question = question.replace(
+                curr_q = curr_q.replace(
                     MACRO,
                     utils.getOneOfWord(MACRO)
                 );
@@ -55,7 +58,7 @@ function init(appendToBody) {
             for (let i = 0, max = int_range.length; i < max; ++i) {
                 const MACRO = int_range[i];
 
-                question = question.replace(
+                curr_q = curr_q.replace(
                     MACRO,
                     utils.generateRandomIntegerFromString(MACRO)
                 );
@@ -65,7 +68,7 @@ function init(appendToBody) {
             for (let i = 0, max = float_range.length; i < max; ++i) {
                 const MACRO = float_range[i];
 
-                question = question.replace(
+                curr_q = curr_q.replace(
                     MACRO,
                     utils.generateRandomFloatFromString(MACRO)
                 );
@@ -75,7 +78,7 @@ function init(appendToBody) {
             for (let i = 0, max = nouns.length; i < max; ++i) {
                 const MACRO = nouns[i];
 
-                question = question.replace(
+                curr_q = curr_q.replace(
                     MACRO,
                     utils.getRandomNoun()
                 );
@@ -85,16 +88,19 @@ function init(appendToBody) {
             for (let i = 0, max = adjectives.length; i < max; ++i) {
                 const MACRO = adjectives[i];
 
-                question = question.replace(
+                curr_q = curr_q.replace(
                     MACRO,
                     utils.getRandomAdjective()
                 );
             }
 
             // Завърших генерирането на j-тият въпрос
-            questions.push(question);
+            fcont.push(curr_q + ' {}\n');
         }
 
-        console.log(JSON.stringify(questions, null, 4));
+        saveFile(
+            [{name: 'text-question.txt', data: fcont.join('\n')}],
+            'text-questions.zip'
+        );
     });
 }
