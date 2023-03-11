@@ -2,7 +2,7 @@
 const to_export = (function (){
     var last_el = null;
 
-    const words = [
+    const nouns = [
         'абаджия',
         'абажур',
         'абанос',
@@ -202,7 +202,137 @@ const to_export = (function (){
         'архаизъм',
         'архангел',
         'архивар',
-        'архиватор'
+        'архиватор',
+        'възхищение',
+        'съвет',
+        'въздух',
+        'гняв',
+        'очакване',
+        'помощ',
+        'осъзнаване',
+        'бекон',
+        'багаж',
+        'кръв',
+        'смелост',
+        'шах',
+        'глина',
+        'облекло',
+        'въглища',
+        'съгласие',
+        'разбиране',
+        'объркване',
+        'съзнание',
+        'сметана',
+        'тъмнина',
+        'усърдие',
+        'прах',
+        'образование',
+        'съпричастие',
+        'ентусиазъм',
+        'завист',
+        'равенство',
+        'оборудване',
+        'доказателства',
+        'обратна връзка',
+        'фитнес',
+        'ласкателство',
+        'шума',
+        'шега',
+        'мебели',
+        'боклук',
+        'злато',
+        'клюка',
+        'граматика',
+        'благодарност',
+        'дребен чакъл',
+        'вина',
+        'щастие',
+        'железария',
+        'омразата',
+        'сено',
+        'здраве',
+        'топлина',
+        'помогне',
+        'колебание',
+        'домашна работа',
+        'честност',
+        'чест/чест',
+        'гостоприемство',
+        'враждебност',
+        'човечество',
+        'смирение',
+        'лед',
+        'безсмъртие',
+        'независимост',
+        'информация',
+        'интегритет',
+        'сплашване',
+        'жаргон',
+        'ревност',
+        'бижута',
+        'правосъдие',
+        'знание',
+        'грамотност',
+        'логика',
+        'късмет',
+        'дървен материал',
+        'багаж',
+        'поща',
+        'управление',
+        'стока',
+        'мляко',
+        'дух',
+        'кал',
+        'музика',
+        'глупости',
+        'потисничество',
+        'оптимизъм',
+        'кислород',
+        'участие',
+        'заплащане',
+        'мир',
+        'постоянство',
+        'песимизъм',
+        'пневмония',
+        'поезия',
+        'полиция',
+        'гордост',
+        'поверителност',
+        'пропаганда',
+        'обществен',
+        'пунктуация',
+        'възстановяване',
+        'ориз',
+        'ръжда',
+        'удовлетворение',
+        'срам',
+        'овца',
+        'жаргон',
+        'софтуер',
+        'спагети',
+        'сила',
+        'глад',
+        'пара',
+        'стомана',
+        'материя',
+        'поддържа',
+        'пот',
+        'гръм',
+        'дървен материал',
+        'трудя се',
+        'трафик',
+        'обучение',
+        'боклук',
+        'разбиране',
+        'доблест',
+        'жар',
+        'насилие',
+        'топлина',
+        'отпадъци',
+        'метеорологично време',
+        'пшеница',
+        'мъдрост',
+        'работа'
     ];
 
     $(document).ready(function () {
@@ -338,11 +468,33 @@ const to_export = (function (){
         );
     }
 
+    const INT_RANGE_REGEX = /\[-?\d+\.\.-?\d+\]/gi;
+    function generateRandomIntegerFromString(str) {
+        const range = str.replace(/[\[\]]/g, '').split('..')
+        return generateRandomInteger(parseInt(range[0]), parseInt(range[1]));
+    }
+
     function generateRandomFloat(from, to) {
         return (Math.random() * (to - from)) + from;
     }
 
+    const FLOAT_RANGE_REGEX = /\[-?(\d+(\.\d+))\.\.-?(\d+(\.\d+))\]/gi;
+    function generateRandomFloatFromString(str) {
+        const range = str.replace(/[\[\]]/g, '').split('..')
+        return generateRandomFloat(parseFloat(range[0]), parseFloat(range[1]));
+    }
+
+    const RANDOM_NOUN_REGEX = /\(съществително\)/gi;
     function getRandomNoun() {
+        return nouns[generateRandomInteger(0, nouns.length - 1)];
+    }
+
+    const ONEOF_WORD_REGEX = /{([а-я]*[a-z]*)(,[а-я]*[a-z]*)*}/gi;
+    function getOneOfWord(str) {
+        const words = str.replace('{', '')
+            .replace('}', '')
+            .split(',')
+        ;
         return words[generateRandomInteger(0, words.length - 1)];
     }
 
@@ -350,9 +502,17 @@ const to_export = (function (){
         generateZip,
         saveFile,
         utils: Object.freeze({
+            INT_RANGE_REGEX,
+            FLOAT_RANGE_REGEX,
+            RANDOM_NOUN_REGEX,
+            ONEOF_WORD_REGEX,
+
             generateRandomInteger,
+            generateRandomIntegerFromString,
             generateRandomFloat,
-            getRandomNoun
+            generateRandomFloatFromString,
+            getRandomNoun,
+            getOneOfWord
         })
     };
 })();
