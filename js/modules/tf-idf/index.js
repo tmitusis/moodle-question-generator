@@ -145,7 +145,6 @@ function init(appendToBody) {
 
         file_cnt.push(questions.join('\n\n'));
 
-        // TODO - figure out the question filename
         saveFile([{name: 'tf-idf-questions.txt', data: file_cnt.join('\n')}], 'tf-idf-questions.zip');
     });
 }

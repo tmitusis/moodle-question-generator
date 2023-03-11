@@ -34,7 +34,7 @@ function init(appendToBody) {
 
     $('#generate_questions').click(function () {
         const question_template = $('#question').val();
-        const regex = /{[a-яА-Я\s0-9,]+}/i;    // TODO - продължи
+        const regex = /{[a-яА-Я\s0-9,]+}/i;
         const possible_words_placeholder = regex.exec(question_template)[0];
         const cleaned_question = question_template.replace(possible_words_placeholder, '%QUESTION%');
         const possible_words = possible_words_placeholder
