@@ -1,6 +1,6 @@
 function init(appendToBody) {
     function _buildUi() {
-        const el_txt = `<form class="offset-4 col-4">
+        const el_txt = `<form>
             <div class="row">
                 <label for="category" class="form-label">Категория</label>
                 <input id="category" type="text" placeholder="/примерни/категори" class="form-control" aria-describedby="category_help">
