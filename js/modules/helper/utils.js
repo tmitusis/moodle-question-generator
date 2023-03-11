@@ -89,6 +89,22 @@ const utils = (function () {
         return words[generateRandomInteger(0, words.length - 1)];
     }
 
+    /**
+     * @desc Парсва <input>, който съдържа описаните
+     * @param {*} selector - нещо, по което може да се индентифицира <input> елемента. Подава се на $()
+     * @returns {string} - категориите направени в GIFT формат
+     */
+    function parseCategories(selector) {
+        const categories = $(selector).val().split('/').slice(1);
+        const cnt = [];
+
+        for (let i = 0, max = categories.length; i < max; ++i) {
+            cnt.push(`$CATEGORY: $course$/${categories.slice(0, i + 1).join('/')}`);
+        }
+
+        return cnt.join('\n');
+    }
+
     return Object.freeze({
         INT_RANGE_REGEX,
         FLOAT_RANGE_REGEX,
@@ -102,6 +118,7 @@ const utils = (function () {
         generateRandomFloatFromString,
         getRandomNoun,
         getRandomAdjective,
-        getOneOfWord
+        getOneOfWord,
+        parseCategories
     });
 })();
