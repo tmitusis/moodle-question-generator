@@ -95,7 +95,7 @@ function init(appendToBody) {
             }
 
             // Завърших генерирането на j-тият въпрос
-            fcont.push(curr_q + ' {}\n');
+            fcont.push(`::Q${j+1}::${curr_q} {}\n`);
         }
 
         saveFile(

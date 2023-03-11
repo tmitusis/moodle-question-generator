@@ -58,7 +58,7 @@ function init(appendToBody) {
 
         for (let i = 0; i < possible_words.length; ++i) {
             questions.push(
-                '<p>' +
+                `::Q${i+1}::[html]<p>` +
                 cleaned_question.replace('%QUESTION%', possible_words[i]) +
                 `</p><img alt="${$('#alt_text').val() || 'Picture: ' + picture.name}" src="@@PLUGINFILE@@/${picture.name}">` +
                 '\n{}'
