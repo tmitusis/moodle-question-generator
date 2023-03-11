@@ -1,22 +1,13 @@
 // IIFE - does not clutter the global namespace
 (function (){
-    var last_el = null;
-
     $(document).ready(function () {
-        const el = $('#question-selection');
+        const qsel = $('#question-selection');
+        const module_parent = $('#module-root-wrapper');
         const body_ref = $(document.body);
         
-        el.on('change', function () {
-            const mod = el.val();
+        qsel.on('change', function () {
+            const mod = qsel.val();
             const mod_name = $('#question-selection option:selected').text();
-
-            // Remove all the previously loaded modules
-            $('script.module').remove();
-
-            // Remove the previous module body, if any
-            if (last_el !== null) {
-                $(last_el).remove();
-            }
 
             // If the default option was selected then don`t try to load it
             if (mod === 'default') {
@@ -29,7 +20,8 @@
             $.getScript( `js/modules/${mod}/index.js`).done(function (script, textStatus) {
                 // On successful load init the module with it's parent
                 init(function (el) {
-                    $('#module-root-wrapper').append(el);
+                    module_parent.empty();  // Clear any previous children, if any
+                    module_parent.append(el);
                 });
             }).fail(function (e, jqxhr, settings, exception) {
                 const prev_el = $('#failed-loading-alert');
@@ -108,7 +100,7 @@
             return zip.generateAsync(zip_opts, _compressionUpdate);
         }
     }
-    
+
     function saveFile(data, fname) {
         if (typeof fname !== 'string') {
             fname = 'moodle-question-bank.zip';
