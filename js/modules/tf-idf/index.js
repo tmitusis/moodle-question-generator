@@ -1,6 +1,6 @@
 // Initialize the module, if needed
 function init(appendToBody) {
-    const el_txt = `<form class="offset-4 col-4">
+    const el_txt = `<form>
             <div class="row">
                 <label for="category" class="form-label">Категория</label>
                 <input id="category" type="text" placeholder="/примерни/категории" class="form-control" aria-describedby="category_help">

@@ -5,3 +5,7 @@
 .container h1 {
     text-align: center;
 }
+
+.no-padding {
+    padding: 0px
+}

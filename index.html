@@ -12,6 +12,9 @@
         <script type="application/javascript" src="js/libs/jquery-ui-1.13.2/jquery-ui.min.js"></script>
         <script type="application/javascript" src="js/libs/jszip/jszip.min.js"></script>
 
+        <script type="application/javascript" src="js/modules/helper/nouns.js"></script>
+        <script type="application/javascript" src="js/modules/helper/adjectives.js"></script>
+        <script type="application/javascript" src="js/modules/helper/utils.js"></script>
         <script type="application/javascript" src="js/main.js"></script>
 
         <!-- Load CSS files -->
@@ -28,20 +31,18 @@
             <div class="container">
                 <div class="row"><h1>Генериране на въпроси за мудъл</h1></div>
                 <div style="margin-top: 20px" class="row">
-                    <div class="col"></div>
-                    <div class="col">
+                    <div class="offset-3 col-6 no-padding">
                         <select id="question-selection" class="form-select" aria-label="Default select example">
                             <option value="default" selected>Изберете тип въпрос</option>
-                            <option value="tf-idf">TF-IDF</option>
                             <option value="text">Текстови</option>
                             <option value="picture">С картинка</option>
+                            <option value="tf-idf">TF-IDF</option>
                         </select>
                     </div>
-                    <div class="col"></div>
                 </div>
 
                 <!-- Keep this for the first load -->
-                <div style="margin-top: 20px" class="row" id="module-root-wrapper"></div>
+                <div style="margin-top: 20px" class="row offset-3 col-6" id="module-root-wrapper"></div>
             </div>
         </div>
     </body>
