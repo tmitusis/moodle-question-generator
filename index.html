@@ -31,8 +31,7 @@
             <div class="container">
                 <div class="row"><h1>Генериране на въпроси за мудъл</h1></div>
                 <div style="margin-top: 20px" class="row">
-                    <div class="col"></div>
-                    <div class="col">
+                    <div class="offset-3 col-6 no-padding">
                         <select id="question-selection" class="form-select" aria-label="Default select example">
                             <option value="default" selected>Изберете тип въпрос</option>
                             <option value="text">Текстови</option>
@@ -40,11 +39,10 @@
                             <option value="tf-idf">TF-IDF</option>
                         </select>
                     </div>
-                    <div class="col"></div>
                 </div>
 
                 <!-- Keep this for the first load -->
-                <div style="margin-top: 20px" class="row" id="module-root-wrapper"></div>
+                <div style="margin-top: 20px" class="row offset-3 col-6" id="module-root-wrapper"></div>
             </div>
         </div>
     </body>
