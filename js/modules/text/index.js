@@ -31,11 +31,11 @@ function init(appendToBody) {
     $('#generate_questions').click(function () {
         var question = $('#question').val();
 
-        const int_range = question.match(utils.INT_RANGE_REGEX);
-        const float_range = question.match(utils.FLOAT_RANGE_REGEX);
-        const words = question.match(utils.ONEOF_WORD_REGEX);
-        const nouns = question.match(utils.RANDOM_NOUN_REGEX);
-        const adjectives = question.match(utils.RANDOM_ADJECTIVE_REGEX);
+        const int_range = question.match(utils.INT_RANGE_REGEX) || [];
+        const float_range = question.match(utils.FLOAT_RANGE_REGEX) || [];
+        const words = question.match(utils.ONEOF_WORD_REGEX) || [];
+        const nouns_match = question.match(utils.RANDOM_NOUN_REGEX) || [];
+        const adjectives_match = question.match(utils.RANDOM_ADJECTIVE_REGEX) || [];
 
         const q_num = parseInt($('#number_of_questions').val());
 
@@ -75,8 +75,8 @@ function init(appendToBody) {
             }
 
             // Заменя макрото за случайно съществително с дума
-            for (let i = 0, max = nouns.length; i < max; ++i) {
-                const MACRO = nouns[i];
+            for (let i = 0, max = nouns_match.length; i < max; ++i) {
+                const MACRO = nouns_match[i];
 
                 curr_q = curr_q.replace(
                     MACRO,
@@ -85,8 +85,8 @@ function init(appendToBody) {
             }
 
             // Заменя макрото за произволно прилагателно с дума
-            for (let i = 0, max = adjectives.length; i < max; ++i) {
-                const MACRO = adjectives[i];
+            for (let i = 0, max = adjectives_match.length; i < max; ++i) {
+                const MACRO = adjectives_match[i];
 
                 curr_q = curr_q.replace(
                     MACRO,
