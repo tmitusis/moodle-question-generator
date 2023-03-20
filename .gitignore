@@ -8,3 +8,6 @@
 *.zip
 *.rar
 *.tar.gz
+
+# Ignore all document directories
+docs/
