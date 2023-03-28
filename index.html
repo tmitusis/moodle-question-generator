@@ -32,11 +32,12 @@
                 <div class="row"><h1>Генериране на въпроси за мудъл</h1></div>
                 <div style="margin-top: 20px" class="row">
                     <div class="offset-3 col-6 no-padding">
-                        <select id="question-selection" class="form-select" aria-label="Default select example">
-                            <option value="default" selected>Изберете тип въпрос</option>
-                            <option value="text">Текстови</option>
-                            <option value="picture">С картинка</option>
-                            <option value="tf-idf">TF-IDF</option>
+                        <select id="question-selection" class="form-select" aria-label="Select question generator">
+                            <option value="default" aria-label="Please select an option" selected>Изберете тип въпрос</option>
+                            <option value="text" aria-label="Text based">Текстови</option>
+                            <option value="picture" aria-label="Picture based">С картинка</option>
+                            <option value="tf-idf" aria-label="TF-IDF">TF-IDF</option>
+                            <option value="generic" aria-label="Generic generator with user provided functions">Използващ функции от клиента.</option>
                         </select>
                     </div>
                 </div>
