@@ -105,10 +105,10 @@ function init(appendToBody) {
 
         // One of the answers is the correct answer. Here we generate the wrong ones
         for (let i = 0, max = answers_count - 1; i < max; ++i) {
-            const answ = utils.generateRandomFloat(tf_idf/10, tf_idf*2).toFixed(3);
+            const answ = utils.generateRandomFloat(tf_idf/10, tf_idf*2, 3);
 
             // Just one correct answer per question here
-            if (answ === correct_answer) {
+            if (answ === correct_answer || answ % 1 === 0) {
                 --i;
                 continue;
             }
