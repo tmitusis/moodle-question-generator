@@ -1,4 +1,54 @@
 const utils = (function () {
+    function Events() {
+        this.__events = {};
+    }
+
+    Events.prototype.on = function on(event, handler) {
+        const events = this.__events;
+
+        events[event] = events[event] || [];
+        events[event].push(handler);
+    }
+
+    Events.prototype.once = function once(event, handler) {
+        const events = this.__events;
+        const _this = this;
+
+        events[event] = events[event] || [];
+        events[event].push(function _handler (data) {
+            _this.off(event, _handler);
+            // Whatever the
+            handler(data);
+        });
+    }
+
+    Events.prototype.off = function off(event, handler) {
+        const handlers = this.__events[event] || [];
+
+        for (let i = 0, max = handlers.length; i < max; ++i) {
+            if (handlers[i] === handler) {
+                handlers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    Events.prototype.emit = function emit(event, data) {
+        const handlers = this.__events[event] || [];
+
+        for (let i = 0, max = handlers.length; i < max; ++i) {
+            const handler = handlers[i];
+
+            if (typeof handler === 'function') {
+                handler(data);
+            } else {
+                console.error(`Bad handler: ${event}:${handler}`);
+            }
+        }
+    }
+
+    const EVENTS = {};
+
     /**
      * @desc Генерира произволно цяло число в обхват, включително
      * @param {Number} from - начало на обхвата
@@ -98,20 +148,129 @@ const utils = (function () {
         const categories = $(selector).val().split('/').slice(1);
         const cnt = [];
 
+        cnt.push('');
         for (let i = 0, max = categories.length; i < max; ++i) {
             cnt.push(`$CATEGORY: $course$/${categories.slice(0, i + 1).join('/')}`);
+            cnt.push('');
         }
 
         return cnt.join('\n');
     }
 
+    function applyGenerators(text) {
+        const words = text.match(utils.ONEOF_WORD_REGEX) || [];
+        const int_range = text.match(utils.INT_RANGE_REGEX) || [];
+        const float_range = text.match(utils.FLOAT_RANGE_REGEX) || [];
+        const nouns_match = text.match(utils.RANDOM_NOUN_REGEX) || [];
+        const adjectives_match = text.match(utils.RANDOM_ADJECTIVE_REGEX) || [];
+
+        // Заменя макрото за конкретни думи, колкото и пъти да го има
+        for (let i = 0, max = words.length; i < max; ++i) {
+            const MACRO = words[i];
+
+            text = text.replace(
+                MACRO,
+                utils.getOneOfWord(MACRO)
+            );
+        }
+
+        // Заменя макрото за произволни цифри в обхват с произволно цяло число в този обхват
+        for (let i = 0, max = int_range.length; i < max; ++i) {
+            const MACRO = int_range[i];
+
+            text = text.replace(
+                MACRO,
+                utils.generateRandomIntegerFromString(MACRO)
+            );
+        }
+
+        // Заменя макрото за произволни цифри в обхват с произволно десетично число в този обхват
+        for (let i = 0, max = float_range.length; i < max; ++i) {
+            const MACRO = float_range[i];
+
+            text = text.replace(
+                MACRO,
+                utils.generateRandomFloatFromString(MACRO)
+            );
+        }
+
+        // Заменя макрото за случайно съществително с дума
+        for (let i = 0, max = nouns_match.length; i < max; ++i) {
+            const MACRO = nouns_match[i];
+
+            text = text.replace(
+                MACRO,
+                utils.getRandomNoun()
+            );
+        }
+
+        // Заменя макрото за произволно прилагателно с дума
+        for (let i = 0, max = adjectives_match.length; i < max; ++i) {
+            const MACRO = adjectives_match[i];
+
+            text = text.replace(
+                MACRO,
+                utils.getRandomAdjective()
+            );
+        }
+
+        return text;
+    }
+
+    function on(event, handler) {
+        EVENTS[event] = EVENTS[event] || [];
+        EVENTS[event].push(handler);
+    }
+
+    function once(event, handler) {
+        const _this = this;
+
+        EVENTS[event] = EVENTS[event] || [];
+        EVENTS[event].push(function _handler (data) {
+            _this.off(event, _handler);
+            // Whatever the
+            handler(data);
+        });
+    }
+
+    function off(event, handler) {
+        const handlers = EVENTS[event] || [];
+
+        for (let i = 0, max = handlers.length; i < max; ++i) {
+            if (handlers[i] === handler) {
+                handlers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    function emit(event, data, _this) {
+        const handlers = this.__events[event] || [];
+
+        for (let i = 0, max = handlers.length; i < max; ++i) {
+            const handler = handlers[i];
+
+            if (typeof handler === 'function') {
+                handler(data);
+            } else {
+                console.log(`Bad handler: ${event}:${handler}`);
+            }
+        }
+    }
+
+    function firstUp(str) {
+        return str[0].toUpperCase() + str.slice(1);
+    }
+
     return Object.freeze({
+        // Regular expresions
         INT_RANGE_REGEX,
         FLOAT_RANGE_REGEX,
         RANDOM_NOUN_REGEX,
         RANDOM_ADJECTIVE_REGEX,
         ONEOF_WORD_REGEX,
 
+        // Data generators
         generateRandomInteger,
         generateRandomIntegerFromString,
         generateRandomFloat,
@@ -119,6 +278,19 @@ const utils = (function () {
         getRandomNoun,
         getRandomAdjective,
         getOneOfWord,
-        parseCategories
+        applyGenerators,
+
+        // Parsers
+        parseCategories,
+
+        // Events
+        Events,
+        on,
+        once,
+        off,
+        emit,
+
+        // Misc
+        firstUp
     });
 })();
