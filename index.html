@@ -15,6 +15,7 @@
 
         <script type="application/javascript" src="js/utilities/nouns.js"></script>
         <script type="application/javascript" src="js/utilities/adjectives.js"></script>
+        <script type="application/javascript" src="js/utilities/ui.js"></script>
         <script type="application/javascript" src="js/utilities/utils.js"></script>
         <script type="application/javascript" src="js/main.js"></script>
 
@@ -44,7 +45,30 @@
                 </div>
 
                 <!-- Keep this for the first load -->
-                <div style="margin-top: 20px" class="row offset-3 col-6" id="module-root-wrapper"></div>
+                <div id="module-wrapper" style="margin-top: 20px; display: none;" class="row offset-3 col-6">
+                    <div class="row">
+                        <label for="category" class="form-label">Категория</label>
+                        <input id="category" type="text" placeholder="/примерни/категории" class="form-control" aria-describedby="category_help">
+                        <div id="category_help" class="form-text">Категория в която да е въпроса.</div>
+                    </div>
+                    <div class="row">
+                        <label for="number_of_answers" class="form-label">Брой отговори</label>
+                        <input id="number_of_answers" type="number" class="form-control" aria-describedby="number_of_answers_help">
+                        <div id="number_of_answers_help" class="form-text">Колко отговора искате да има всеки въпрос</div>
+                    </div>
+                    <div class="row">
+                        <label for="number_of_questions" class="form-label">Брой въпроси</label>
+                        <input id="number_of_questions" type="number" class="form-control" aria-describedby="number_of_questions_help">
+                        <div id="number_of_questions_help" class="form-text">Колко въпроси искате да има</div>
+                    </div>
+                    <div class="row">
+                        <label for="base_question_name" class="form-label">Базово име на въпрос</label>
+                        <input id="base_question_name" type="text" class="form-control" aria-describedby="base_question_name_help">
+                        <div id="base_question_name_help" class="form-text">Към името ще се добави и номера <име> <номер>(пр: "Въпрос 1")</div>
+                    </div>
+                    <div class="row" id="module-root-wrapper"></div>
+                    <button id="generate_questions" type="button" class="btn btn-primary">Генерирай въпроси</button>`
+                </div>
             </div>
         </div>
     </body>
