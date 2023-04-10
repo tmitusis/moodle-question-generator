@@ -59,7 +59,6 @@
 
             file_cnt.push(questions.join('\n'));
 
-            console.log(allowed_checks);
             if (allowed_checks === 0) {
                 const ev = ui.alert(`Пробвах ${question_counts * 10} пъти, но намерих само ${i} уникални въпроса от ${questions.length}. Да генерирам ли файла?`, 'warning', ['да:success', 'не:danger']);
 
