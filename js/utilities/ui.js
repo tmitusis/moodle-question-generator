@@ -63,7 +63,7 @@ const ui = (function () {
                 ev.emit('alert-button-click', e);
                 const el = $(wrapper);
 
-                el.hide('slow', el.remove);
+                el.hide('slow', wrapper.remove);
             });
         }
 
