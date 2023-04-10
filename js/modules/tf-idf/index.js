@@ -91,8 +91,7 @@ var module = (function () {
         const ret = {
             question: `[html]<p>Пресметнете TF-IDF за думата предоставена в примера:</p>\\n${_genTable(docs, word)}`,
             answers: [],
-            files: [],
-            isNumericAnswer: false
+            files: []
         };
 
         for (let i = 0, max = all_answers.length; i < max; ++i) {

@@ -24,7 +24,6 @@ var module = (function () {
         return {
             question: utils.applyGenerators(question),
             answers: [],
-            isNumericAnswer: false,
             files: []
         }
     }

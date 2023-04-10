@@ -51,7 +51,6 @@ var module = (function () {
         return {
             question: utils.applyGenerators(question),
             answers: [],
-            isNumericAnswer: false,
             files: [
                 {name: picture.name, data: (picture)}
             ]
