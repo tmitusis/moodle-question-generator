@@ -34,6 +34,11 @@
             for (var i = 0; i < question_counts; ++i) {
                 const q = module.generateQuestion(i + 1, answers_count, els);
 
+                // This indicates that the question should not be converted to a file
+                if (q.dud) {
+                    continue;
+                }
+
                 if (allowed_checks === 0) {
                     break;
                 }
@@ -49,12 +54,24 @@
                 // files = files.concat(q.files);
                 _addUnique(files, q.files);
 
+                const is_numeric = _areNumeric(q.answers);
+
                 // I don`t apply the generators here since this is the job of the module.
                 questions.push('::' + base_question_name + ' ' + (i + 1) + '::' + q.question);
-                questions.push('{' + q.isNumericAnswer ? '#' : '');
+                questions.push('{' + is_numeric ? '#' : '');
                 questions.push(q.answers.join('\n'));
                 questions.push('}');
                 questions.push('');
+            }
+
+            if (questions.length === 0) {
+                ui.alert(
+                    'Няма успешно генерирани въпроси. Няма да се създаде архив.',
+                    'warning',
+                    ['Добре:primary']
+                );
+
+                return;
             }
 
             file_cnt.push(questions.join('\n'));
@@ -149,6 +166,23 @@
                 current.push(item);
             }
         }
+    }
+
+    function _areNumeric(answers_array) {
+        let are_num = true;
+
+        for (let i = 0, max = answers_array.length; i < max; ++i) {
+            const answ = answers_array[i];
+
+            // We want all answers to be numeric, or we determine that the answers are not numeric
+            // since it does not make sense that one of the answer is numeric and another is not
+            are_num = (
+                answ.indexOf(':') > -1 ||
+                answ.indexOf('..') > -1
+            ) && are_num;
+        }
+
+        return are_num;
     }
 
     function _isUnique(array, item) {
