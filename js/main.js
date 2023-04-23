@@ -29,7 +29,8 @@
 
             // Maximum number of tries to generate unique questions. If this number is not enough
             // A message informing the user of the situation will be shown
-            let allowed_checks = question_counts * 10;
+            const max_allowed_checks = question_counts * 10;
+            let allowed_checks = max_allowed_checks;
 
             for (var i = 0; i < question_counts; ++i) {
                 const q = module.generateQuestion(i + 1, answers_count, els);
@@ -77,7 +78,7 @@
             file_cnt.push(questions.join('\n'));
 
             if (allowed_checks === 0) {
-                const ev = ui.alert(`Пробвах ${question_counts * 10} пъти, но намерих само ${i} уникални въпроса от ${questions.length}. Да генерирам ли файла?`, 'warning', ['да:success', 'не:danger']);
+                const ev = ui.alert(`Пробвах ${max_allowed_checks} пъти, но намерих само ${i} уникални въпроса от ${questions.length}. Да генерирам ли файла?`, 'warning', ['да:success', 'не:danger']);
 
                 ev.once('alert-button-click', function handler(e) {
                     const target = $(e.target);
