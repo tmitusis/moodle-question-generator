@@ -36,7 +36,7 @@ const ui = (function () {
                 style="display: inline; float: right; margin-left: 4px;" 
                 type="button" 
                 data-name="${arr[0]}"
-                class="btn btn-sm btn-outline-${arr[1] || type} alert-button" 
+                class="btn btn-sm btn-${arr[1] || type} alert-button" 
                 data-bs-dismiss="alert" 
                 aria-label="${utils.firstUp(arr[0])}">
                     ${utils.firstUp(arr[0])}
