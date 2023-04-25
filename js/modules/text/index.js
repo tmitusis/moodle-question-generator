@@ -21,11 +21,13 @@ var module = (function () {
         const question = $('#question').val();
 
         // Завърших генерирането на j-тият въпрос
-        return {
-            question: utils.applyGenerators(question),
-            answers: [],
-            files: []
-        }
+        return new Promise(function (resolve, reject) {
+            resolve({
+                question: utils.applyGenerators(question),
+                answers: [],
+                files: []
+            });
+        })
     }
 
     return {

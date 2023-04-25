@@ -23,6 +23,7 @@
             const questions = [];
             const file_cnt = [];
             let files = [];
+            const i = 0;
 
             // Adding a new line after the categories
             file_cnt.push(utils.parseCategories('#category'));
@@ -30,69 +31,60 @@
             // Maximum number of tries to generate unique questions. If this number is not enough
             // A message informing the user of the situation will be shown
             const max_allowed_checks = question_counts * 10;
-            let allowed_checks = max_allowed_checks;
 
-            for (var i = 0; i < question_counts; ++i) {
+            function generateQuestions(i, question_generation_retries) {
+                console.log('Started...');
                 const q = module.generateQuestion(i + 1, answers_count, els);
 
-                // This indicates that the question should not be converted to a file
-                if (q.dud) {
-                    continue;
+                if (question_generation_retries === 0) {
+                    generateFile(i, questions, file_cnt, question_generation_retries, max_allowed_checks, files);
+                    return;
                 }
 
-                if (allowed_checks === 0) {
-                    break;
+                console.log(i, questions.length, question_counts, question_generation_retries);
+                if (i > question_counts) {
+                    console.log('i is greater than question_count');
+                    generateFile(i, questions, file_cnt, question_generation_retries, max_allowed_checks, files);
+                    return;
                 }
 
-                // If the question is not unique generate it again
-                if (!_isUnique(questions, q.question)) {
-                    --allowed_checks;
-                    --i;
-                    continue;
-                }
-
-                // Push the unique files to the array
-                // files = files.concat(q.files);
-                _addUnique(files, q.files);
-
-                const is_numeric = _areNumeric(q.answers);
-
-                // I don`t apply the generators here since this is the job of the module.
-                questions.push('::' + base_question_name + ' ' + (i + 1) + '::' + q.question);
-                questions.push('{' + is_numeric ? '#' : '');
-                questions.push(q.answers.join('\n'));
-                questions.push('}');
-                questions.push('');
-            }
-
-            if (questions.length === 0) {
-                ui.alert(
-                    'Няма успешно генерирани въпроси. Няма да се създаде архив.',
-                    'warning',
-                    ['Добре:primary']
-                );
-
-                return;
-            }
-
-            file_cnt.push(questions.join('\n'));
-
-            if (allowed_checks === 0) {
-                const ev = ui.alert(`Пробвах ${max_allowed_checks} пъти, но намерих само ${i} уникални въпроса от ${questions.length}. Да генерирам ли файла?`, 'warning', ['да:success', 'не:danger']);
-
-                ev.once('alert-button-click', function handler(e) {
-                    const target = $(e.target);
-
-                    if (target.attr('data-name') === 'да') {
-                        files.push({name: 'question.txt', data: file_cnt.join('\n')});
-                        saveFile(files, _transform(module.name) + '.zip');
+                q.then(function (q) {
+                    // This indicates that the question should not be converted to a file
+                    if (q.dud) {
+                        console.log('Question is a dud');
+                        generateQuestions(i, --question_generation_retries);
+                        return;
                     }
-                });
-            } else {
-                files.push({name: 'question.txt', data: file_cnt.join('\n')});
 
-                saveFile(files, _transform(module.name) + '.zip');
+                    // If the question is not unique generate it again
+                    if (!_isUnique(questions, q.question)) {
+                        console.log('Question is not unique');
+                        generateQuestions(i, --question_generation_retries);
+
+                        return;
+                    }
+
+                    // Push the unique files to the array
+                    // files = files.concat(q.files);
+                    _addUnique(files, q.files);
+
+                    const is_numeric = _areNumeric(q.answers);
+
+                    // I don`t apply the generators here since this is the job of the module.
+                    questions.push('::' + base_question_name + ' ' + (i + 1) + '::' + q.question);
+                    questions.push('{' + (is_numeric ? '#' : ''));
+                    questions.push(q.answers.join('\n'));
+                    questions.push('}');
+                    questions.push('');
+
+                    generateQuestions(++i, question_generation_retries);
+                }, function (err) {
+                    console.error(err.message);
+                    generateQuestions(i, --question_generation_retries);
+                });
             }
+
+            generateQuestions(0, max_allowed_checks);
         });
 
         // ============================ \\
@@ -149,6 +141,43 @@
         });
     });
 
+    function generateFile(
+        generated_questions,
+        questions_data,
+        file_cnt,
+        question_retried,
+        max_allowed_checks,
+        files
+    ) {
+        if (generated_questions === 0) {
+            ui.alert(
+                'Няма успешно генерирани въпроси. Няма да се създаде архив.',
+                'warning',
+                ['Добре:primary']
+            );
+
+            return;
+        }
+
+        file_cnt.push(questions_data.join('\n'));
+
+        if (question_retried === 0) {
+            const ev = ui.alert(`Пробвах ${max_allowed_checks} пъти, но намерих само ${generated_questions} уникални въпроса. Да генерирам ли файла?`, 'warning', ['да:success', 'не:danger']);
+
+            ev.once('alert-button-click', function handler(e) {
+                const target = $(e.target);
+
+                if (target.attr('data-name') === 'да') {
+                    files.push({name: 'question.txt', data: file_cnt.join('\n')});
+                    saveFile(files, _transform(module.name) + '.zip');
+                }
+            });
+        } else {
+            files.push({name: 'question.txt', data: file_cnt.join('\n')});
+            saveFile(files, _transform(module.name) + '.zip');
+        }
+    }
+
     function _addUnique(current, new_arr) {
         for (let i = 0, max = new_arr.length; i < max; ++i) {
             const item = new_arr[i];
@@ -172,15 +201,19 @@
     function _areNumeric(answers_array) {
         let are_num = true;
 
-        for (let i = 0, max = answers_array.length; i < max; ++i) {
-            const answ = answers_array[i];
+        if (answers_array.length > 0) {
+            for (let i = 0, max = answers_array.length; i < max; ++i) {
+                const answ = answers_array[i];
 
-            // We want all answers to be numeric, or we determine that the answers are not numeric
-            // since it does not make sense that one of the answer is numeric and another is not
-            are_num = (
-                answ.indexOf(':') > -1 ||
-                answ.indexOf('..') > -1
-            ) && are_num;
+                // We want all answers to be numeric, or we determine that the answers are not numeric
+                // since it does not make sense that one of the answer is numeric and another is not
+                are_num = (
+                    answ.indexOf(':') > -1 ||
+                    answ.indexOf('..') > -1
+                ) && are_num;
+            }
+        } else {
+            are_num = false;
         }
 
         return are_num;

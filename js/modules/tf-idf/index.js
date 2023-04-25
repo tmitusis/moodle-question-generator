@@ -99,7 +99,9 @@ var module = (function () {
             ret.answers.push(`\t${answ === tf_idf ? '=' : '~'} \\= ${answ}`);
         }
 
-        return ret;
+        return new Promise(function (resolve, reject) {
+            resolve(ret);
+        });
     }
 
     return {

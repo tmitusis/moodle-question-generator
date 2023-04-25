@@ -39,6 +39,11 @@ var module = (function () {
 
         const picture = $('#picture')[0].files[0];
 
+        if (picture === undefined) {
+            ui.alert('Не сте добавили изображение. Моля добавете и тогава пробвайте пак.', 'warning', ['Добре:primary']);
+            return Promise.reject();
+        }
+
         const question = `[html]<p>` +
             cleaned_question.replace(
                 '%QUESTION%',
@@ -48,13 +53,15 @@ var module = (function () {
             '\n{}'
         ;
 
-        return {
-            question: utils.applyGenerators(question),
-            answers: [],
-            files: [
-                {name: picture.name, data: (picture)}
-            ]
-        }
+        return new Promise(function (resolve, reject) {
+            resolve({
+                question: utils.applyGenerators(question),
+                answers: [],
+                files: [
+                    {name: picture.name, data: (picture)}
+                ]
+            });
+        });
     }
 
     return {
