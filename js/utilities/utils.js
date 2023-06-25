@@ -50,6 +50,15 @@ const utils = (function () {
     const EVENTS = {};
 
     /**
+     * @desc Взима произволен елемент от масива
+     * @param {Array} array - масива от който да вземе елемент
+     * @returns {*} - произволният елемент
+     */
+    function getRandomElement(array) {
+        return array[generateRandomInteger(0, array.length - 1)];
+    }
+
+    /**
      * @desc Генерира произволно цяло число в обхват, включително
      * @param {Number} from - начало на обхвата
      * @param {Number} to - край на обхвата
@@ -262,6 +271,30 @@ const utils = (function () {
         return str[0].toUpperCase() + str.slice(1);
     }
 
+    // Code gotten from here:
+    // https://stackoverflow.com/a/12300351
+    function dataURItoBlob(dataURI) {
+        const split = dataURI.split(',');
+        const byteString = atob(split[1]);
+
+        // separate out the mime component
+        const mimeString = split[0].split(':')[1].split(';')[0]
+
+        // write the bytes of the string to an ArrayBuffer
+        const ab = new ArrayBuffer(byteString.length);
+
+        // create a view into the buffer
+        const ia = new Uint8Array(ab);
+
+        // set the bytes of the buffer to the correct values
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        // write the ArrayBuffer to a blob, and you're done
+        return new Blob([ab], {type: mimeString});
+    }
+
     return Object.freeze({
         // Regular expresions
         INT_RANGE_REGEX,
@@ -271,6 +304,7 @@ const utils = (function () {
         ONEOF_WORD_REGEX,
 
         // Data generators
+        getRandomElement,
         generateRandomInteger,
         generateRandomIntegerFromString,
         generateRandomFloat,
@@ -291,6 +325,7 @@ const utils = (function () {
         emit,
 
         // Misc
-        firstUp
+        firstUp,
+        dataURItoBlob
     });
 })();
