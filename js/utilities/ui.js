@@ -14,7 +14,7 @@ const ui = (function () {
      * @desc An alert to be shown
      * @param {String} message - the message to be shown
      * @param {('primary'|'secondary'|'success'|'danger'|'warning'|'info'|'light'|'dark')} type
-     * @param {String[]} buttons - an array of one or more of the designated types. If just the name is provided it will be used. If the name and type are provided in a pair(name:type) the selected type will be used.
+     * @param {String[]|String} buttons - an array of one or more of the designated types. If just the name is provided it will be used. If the name and type are provided in a pair(name:type) the selected type will be used.
      */
     function alert(message, type, buttons) {
         if (ALERT_TYPES.indexOf(type) === -1) {
@@ -22,6 +22,11 @@ const ui = (function () {
             return;
         }
         const ev = new utils.Events();
+
+        // If there is only one button required just make it into an array
+        if (typeof buttons === 'string') {
+            buttons = [buttons];
+        }
 
         if (typeof buttons !== 'object' && typeof buttons?.length !== 'number') {
             buttons = ['добре', 'откажи'];
