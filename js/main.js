@@ -41,9 +41,7 @@
                     return;
                 }
 
-                console.log(i, questions.length, question_counts, question_generation_retries);
-                if (i > question_counts) {
-                    console.log('i is greater than question_count');
+                if (i >= question_counts) {
                     generateFile(i, questions, file_cnt, question_generation_retries, max_allowed_checks, files);
                     return;
                 }
@@ -79,8 +77,19 @@
 
                     generateQuestions(++i, question_generation_retries);
                 }, function (err) {
-                    console.error(err.message);
-                    generateQuestions(i, --question_generation_retries);
+                    if (err === null || err === undefined) {
+                        generateQuestions(i, --question_generation_retries);
+                    } else {
+                        if (err instanceof Error) {
+                            err = err.message;
+                        }
+
+                        ui.alert(
+                            err,
+                            'danger',
+                            'Добре:primary'
+                        );
+                    }
                 });
             }
 
