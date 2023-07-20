@@ -9,3 +9,7 @@
 .no-padding {
     padding: 0px
 }
+
+#module-root-wrapper {
+    padding-right: 36px;
+}
