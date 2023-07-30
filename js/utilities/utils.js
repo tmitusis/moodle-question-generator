@@ -48,7 +48,6 @@ const utils = (function () {
     }
 
     const EVENTS = {};
-
     /**
      * @desc Взима произволен елемент от масива
      * @param {Array} array - масива от който да вземе елемент
@@ -71,7 +70,6 @@ const utils = (function () {
     }
 
     const INT_RANGE_REGEX = /\[-?\d+\.\.-?\d+\]/gi;
-
     /**
      * @desc Генерира произволно число, като приема текст, описващ обхвата
      * @param {String} str - текст, описващ обхвата. пр: [1..4].
@@ -115,7 +113,6 @@ const utils = (function () {
     }
 
     const RANDOM_NOUN_REGEX = /\(съществително\)/gi;
-
     /**
      * @desc Връща произволна дума от глобалният речник със съществителни "nouns"
      * @returns {String} - дсадената дума
@@ -134,7 +131,6 @@ const utils = (function () {
     }
 
     const ONEOF_WORD_REGEX = /{([а-я]*[a-z]*)(,[а-я]*[a-z]*)*}/gi;
-
     /**
      * @desc Избира една от изброените думи и я връща
      * @param {String} str - изброените думи. пр: {куче,котка,къща}
@@ -146,6 +142,96 @@ const utils = (function () {
             .split(',')
         ;
         return words[generateRandomInteger(0, words.length - 1)];
+    }
+
+    const LETTERS_LATIN_RANGE_REGEX = /\[([a-z]+)\.\.([a-z])\](@[ul]+)?/gi;
+    const LETTERS_LATIN = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    /**
+     * @desc Взима произволна латинска буква в обхвата и я връща
+     * @param {String} from - буквата, от която да започнем. По подразбиране "a"
+     * @param {String} to - буквата, до която да продължим. По подразбиране "z"
+     @param {String} str_case - дали да върне малка(l) или голяма('u')
+     * @returns {String} - една от горе-изброените букви
+     */
+    function getLatinLetter(from = 'a', to = 'z', str_case = 'l') {
+        var char =  getRandomElement(
+            LETTERS_LATIN.slice(
+                LETTERS_LATIN.indexOf(from),
+                LETTERS_LATIN.indexOf(to) + 1
+            )
+        );
+
+        if (str_case === 'u') {
+            char = char.toUpperCase();
+        }
+
+        return char;
+    }
+
+    /**
+     * @desc Генерира произволна буква в обхвата и голяма/малка
+     * @param {String} str - текст, описващ обхвата и дали да е голяма(u) или малка(l). пр: [a..c]@u.
+     * @returns {String} - избраната главна/малка буква
+     */
+    function getLatinLetterFromString(str) {
+        str = str.replace(/[\[\]]/g, '');
+        const at_idx = str.indexOf('@');
+        const range = str
+            .substring(0, at_idx === -1 ? str.length : at_idx)
+            .split('..')
+        ;
+        let str_case = 'l';
+
+        if (at_idx !== -1) {
+            str_case = str.substring(at_idx + 1, str.length);
+        }
+
+        return getLatinLetter(range[0], range[1], str_case);
+    }
+
+    const LETTERS_CYRILLIC_RANGE_REGEX = /\[([а-я]+)\.\.([а-я]+)\](@[ul]+)?/gi;
+    const LETTERS_CYRILLIC = ['а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'ю', 'я'];
+    /**
+     * @desc Взима произволна кирилска буква в обхвата и я връща
+     * @param {String} from - буквата, от която да започнем. По подразбиране "а"
+     * @param {String} to - буквата, до която да продължим. По подразбиране "я"
+     * @param {String} str_case - дали да върне малка(l) или голяма('u')
+     * @returns {String} - една от горе-изброените букви
+     */
+    function getCyrillicLetter(from = 'а', to = 'я', str_case = 'l') {
+        var char = getRandomElement(
+            LETTERS_CYRILLIC.slice(
+                LETTERS_CYRILLIC.indexOf(from),
+                LETTERS_CYRILLIC.indexOf(to) + 1
+            )
+        );
+
+        if (str_case === 'u') {
+            char = char.toUpperCase();
+        }
+
+        return char;
+    }
+
+    /**
+     * @desc Генерира произволна буква в обхвата и голяма/малка
+     * @param {String} str - текст, описващ обхвата и дали да е голяма(u) или малка(l). пр: [в..ж]@u.
+     * @returns {String} - избраната главна/малка буква
+     */
+    function getCyrillicLetterFromString(str) {
+        str = str.replace(/[\[\]]/g, '');
+        const at_idx = str.indexOf('@');
+        const range = str
+            .substring(0, at_idx === -1 ? str.length : at_idx)
+            .split('..')
+        ;
+        let str_case = 'l';
+
+        if (at_idx !== -1) {
+            str_case = str.substring(at_idx + 1, str.length);
+        }
+
+        return getCyrillicLetter(range[0], range[1], str_case);
     }
 
     /**
@@ -172,6 +258,8 @@ const utils = (function () {
         const float_range = text.match(utils.FLOAT_RANGE_REGEX) || [];
         const nouns_match = text.match(utils.RANDOM_NOUN_REGEX) || [];
         const adjectives_match = text.match(utils.RANDOM_ADJECTIVE_REGEX) || [];
+        const latin_letter_match = text.match(utils.LETTERS_LATIN_RANGE_REGEX) || [];
+        const cyrillic_letter_match = text.match(utils.LETTERS_CYRILLIC_RANGE_REGEX) || [];
 
         // Заменя макрото за конкретни думи, колкото и пъти да го има
         for (let i = 0, max = words.length; i < max; ++i) {
@@ -220,6 +308,26 @@ const utils = (function () {
             text = text.replace(
                 MACRO,
                 utils.getRandomAdjective()
+            );
+        }
+
+        // Заменя макрото за произволната буква с такава
+        for (let i = 0, max = latin_letter_match.length; i < max; ++i) {
+            const MACRO = latin_letter_match[i];
+
+            text = text.replace(
+                MACRO,
+                utils.getLatinLetterFromString(MACRO)
+            );
+        }
+
+        // Заменя макрото за произволната буква с такава
+        for (let i = 0, max = cyrillic_letter_match.length; i < max; ++i) {
+            const MACRO = cyrillic_letter_match[i];
+
+            text = text.replace(
+                MACRO,
+                utils.getCyrillicLetterFromString(MACRO)
             );
         }
 
@@ -302,6 +410,8 @@ const utils = (function () {
         RANDOM_NOUN_REGEX,
         RANDOM_ADJECTIVE_REGEX,
         ONEOF_WORD_REGEX,
+        LETTERS_LATIN_RANGE_REGEX,
+        LETTERS_CYRILLIC_RANGE_REGEX,
 
         // Data generators
         getRandomElement,
@@ -312,6 +422,10 @@ const utils = (function () {
         getRandomNoun,
         getRandomAdjective,
         getOneOfWord,
+        getLatinLetter,
+        getLatinLetterFromString,
+        getCyrillicLetter,
+        getCyrillicLetterFromString,
         applyGenerators,
 
         // Parsers
