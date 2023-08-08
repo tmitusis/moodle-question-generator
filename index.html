@@ -12,6 +12,7 @@
         <script type="application/javascript" src="js/libs/jquery-ui-1.13.2/jquery-ui.min.js"></script>
         <script type="application/javascript" src="js/libs/jszip/jszip.min.js"></script>
         <script type="application/javascript" src="js/libs/suica/suica.js"></script>
+        <script type="application/javascript" src="js/libs/html2canvas/html2canvas.min.js"></script>
 
         <script type="application/javascript" src="js/utilities/nouns.js"></script>
         <script type="application/javascript" src="js/utilities/adjectives.js"></script>
@@ -40,7 +41,7 @@
                             <option value="picture" aria-label="Picture based">С картинка</option>
                             <option value="tf-idf" aria-label="TF-IDF">TF-IDF</option>
                             <option value="boolean-checks" aria-label="Boolean operations exit">Изход от булеви операции</option>
-                            <option value="generic" aria-label="Generic generator with user provided functions">Използващ функции от клиента.</option>
+                            <option value="formula-questions" aria-label="Formula based">Въпроси с формула</option>
                         </select>
                     </div>
                 </div>
@@ -65,10 +66,10 @@
                     <div class="row">
                         <label for="base_question_name" class="form-label">Базово име на въпрос</label>
                         <input id="base_question_name" type="text" class="form-control" aria-describedby="base_question_name_help">
-                        <div id="base_question_name_help" class="form-text">Към името ще се добави и номера <име> <номер>(пр: "Въпрос 1")</div>
+                        <div id="base_question_name_help" class="form-text">Към името ще се добави и номера: Пример <име> <номер></div>
                     </div>
                     <div id="module-root-wrapper"></div>
-                    <button id="generate_questions" type="button" class="btn btn-primary">Генерирай въпроси</button>`
+                    <button id="generate_questions" type="button" class="btn btn-primary">Генерирай въпроси</button>
                 </div>
             </div>
         </div>
