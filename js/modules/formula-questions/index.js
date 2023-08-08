@@ -87,7 +87,7 @@ var module = (function () {
 
                     resolve({
                         question: `[html] ${utils.applyGenerators(q_txt)}`,
-                        answers: ['#Feedback text'],
+                        answers: [`=${formula.replaceAll('=', '\\=')}`],
                         files: [{
                             name: img_name,
                             data: utils.dataURItoBlob(data_url)
